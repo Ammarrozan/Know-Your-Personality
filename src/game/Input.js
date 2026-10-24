@@ -1,110 +1,78 @@
-// =====================================================================
-// Input.js — keyboard W/A/S/D, panah, dan Spasi (Task 2.6)
-// Domain DEV 1 (feature/canvas-engine)
-//
-// - Spasi diproses sebagai "tekan sekali" (edge), bukan tahan.
-// - Saat paused = true: gerak & Spasi diabaikan, antrean aksi dibuang,
-//   dan Spasi tetap di-preventDefault sehingga TIDAK ikut "mengklik"
-//   tombol opsi dialog yang sedang fokus (SRS 5.2).
-// =====================================================================
-
-const KEY_TO_DIR = {
-  KeyW: "up",
-  ArrowUp: "up",
-  KeyS: "down",
-  ArrowDown: "down",
-  KeyA: "left",
-  ArrowLeft: "left",
-  KeyD: "right",
-  ArrowRight: "right",
-};
-
-function isTypingTarget(el) {
-  if (!el) return false;
-  const tag = el.tagName;
-  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable;
-}
+// Input.js - menangkap keyboard (WASD/panah) dan Spasi. Dev 1.
+const MOVE_KEYS = new Set([
+  'KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
+]);
 
 export default class Input {
-  constructor(target = window) {
-    this.target = target;
-    this.held = []; // urutan arah yang sedang ditahan (terakhir = prioritas)
-    this.actionQueued = false;
+  constructor() {
+    this.keys = new Set();
+    this.actionQueued = false; // Spasi ditekan (sekali per tekanan)
     this.paused = false;
-
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    // capture = true: dijalankan sebelum handler tombol React
-    target.addEventListener("keydown", this.onKeyDown, true);
-    target.addEventListener("keyup", this.onKeyUp, true);
-    window.addEventListener("blur", this.onBlur);
+    this.debugToggle = false;
+    this._down = this._down.bind(this);
+    this._up = this._up.bind(this);
+    this._blur = this._blur.bind(this);
   }
 
-  onKeyDown(e) {
-    if (isTypingTarget(e.target)) return;
-    if (e.code === "Space") {
+  attach() {
+    window.addEventListener('keydown', this._down);
+    window.addEventListener('keyup', this._up);
+    window.addEventListener('blur', this._blur);
+  }
+
+  detach() {
+    window.removeEventListener('keydown', this._down);
+    window.removeEventListener('keyup', this._up);
+    window.removeEventListener('blur', this._blur);
+    this.keys.clear();
+    this.actionQueued = false;
+  }
+
+  setPaused(p) {
+    this.paused = p;
+    this.actionQueued = false; // buang Spasi yang tertahan
+  }
+
+  _down(e) {
+    if (e.code === 'Space') {
+      e.preventDefault(); // cegah halaman scroll / tombol dialog ter-klik
+      if (!e.repeat && !this.paused) this.actionQueued = true;
+      return;
+    }
+    if (MOVE_KEYS.has(e.code)) {
       e.preventDefault();
-      if (!this.paused && !e.repeat) this.actionQueued = true;
-      return;
-    }
-    const dir = KEY_TO_DIR[e.code];
-    if (!dir) return;
-    if (e.code.startsWith("Arrow")) e.preventDefault();
-    if (this.paused) return;
-    if (!this.held.includes(dir)) this.held.push(dir);
-  }
-
-  onKeyUp(e) {
-    if (isTypingTarget(e.target)) return;
-    if (e.code === "Space") {
-      e.preventDefault(); // cegah aktivasi tombol fokus oleh Spasi
-      return;
-    }
-    const dir = KEY_TO_DIR[e.code];
-    if (dir) this.held = this.held.filter((d) => d !== dir);
-  }
-
-  onBlur() {
-    this.held = [];
-    this.actionQueued = false;
-  }
-
-  setPaused(paused) {
-    this.paused = paused;
-    if (paused) {
-      this.held = [];
-      this.actionQueued = false;
+      this.keys.add(e.code);
+    } else if (e.code === 'KeyH' && !e.repeat) {
+      this.debugToggle = true; // H = tampilkan hitbox (QA)
     }
   }
 
-  /** Arah gerak saat ini: {dx, dy, dir} (dir = arah hadap terakhir ditekan). */
-  getMovement() {
-    if (this.paused || this.held.length === 0) return { dx: 0, dy: 0, dir: null };
-    let dx = 0;
-    let dy = 0;
-    if (this.held.includes("left")) dx -= 1;
-    if (this.held.includes("right")) dx += 1;
-    if (this.held.includes("up")) dy -= 1;
-    if (this.held.includes("down")) dy += 1;
-    if (dx !== 0 && dy !== 0) {
-      dx *= Math.SQRT1_2;
-      dy *= Math.SQRT1_2;
-    }
-    return { dx, dy, dir: this.held[this.held.length - 1] };
+  _up(e) {
+    if (e.code === 'Space') e.preventDefault();
+    this.keys.delete(e.code);
   }
 
-  /** true sekali per tekan Spasi (lalu antrean dikosongkan). */
+  _blur() {
+    this.keys.clear();
+  }
+
+  // Arah gerak -1/0/1 per sumbu
+  getAxis() {
+    const k = this.keys;
+    const dx = (k.has('KeyD') || k.has('ArrowRight') ? 1 : 0) - (k.has('KeyA') || k.has('ArrowLeft') ? 1 : 0);
+    const dy = (k.has('KeyS') || k.has('ArrowDown') ? 1 : 0) - (k.has('KeyW') || k.has('ArrowUp') ? 1 : 0);
+    return { dx, dy };
+  }
+
   consumeAction() {
-    const queued = this.actionQueued;
+    const a = this.actionQueued;
     this.actionQueued = false;
-    return queued && !this.paused;
+    return a;
   }
 
-  destroy() {
-    this.target.removeEventListener("keydown", this.onKeyDown, true);
-    this.target.removeEventListener("keyup", this.onKeyUp, true);
-    window.removeEventListener("blur", this.onBlur);
-    this.held = [];
+  consumeDebugToggle() {
+    const t = this.debugToggle;
+    this.debugToggle = false;
+    return t;
   }
 }
