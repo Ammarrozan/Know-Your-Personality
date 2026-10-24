@@ -1,0 +1,390 @@
+/* index.css - variabel warna & styling global (CSS murni). Domain Dev 2. */
+
+:root {
+  /* Tema gelap: navy + aksen kuning (senada penanda zona di peta) */
+  --bg: #0b1020;
+  --surface: #151d3b;
+  --surface-2: #1d2850;
+  --border: #33427f;
+  --text: #f3f5ff;
+  --text-muted: #b8c0e3;
+  --accent: #ffd740;
+  --accent-strong: #ffc107;
+  --bar: #6b7fd6;
+  --on-accent: #2b2000;
+  --overlay: rgba(6, 9, 20, 0.72);
+
+  --radius: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  /* Padding vertikal total 16px = rumus lebar kanvas Dev 1: (100vh - 16px) x 1.5.
+     Jangan ubah, atau muncul scrollbar. */
+  padding: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Tata letak halaman ---------- */
+
+.app {
+  min-height: calc(100vh - 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Area game: lebar & rasio 3:2 sama dengan GameCanvas (Dev 1).
+   HUD dan dialog diletakkan absolute di dalam .stage. */
+.stage {
+  position: relative;
+  width: min(100%, calc((100vh - 16px) * 1.5));
+  container-type: inline-size; /* satuan cqw: teks overlay ikut mengecil bersama kanvas */
+}
+
+/* ---------- Komponen umum ---------- */
+
+.panel {
+  width: min(100%, 36rem);
+  padding: 1.6em 1.8em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.panel__title {
+  margin-bottom: 0.4em;
+  font-size: 1.35em;
+  line-height: 1.25;
+}
+
+.panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  margin-top: 1.2em;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.btn {
+  appearance: none;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 0.65em 1.6em;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--on-accent);
+  transition: background-color 0.12s ease;
+}
+
+.btn:hover {
+  background: var(--accent-strong);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.btn--ghost:hover {
+  background: var(--surface-2);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 2em;
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--border);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: 600 0.85em/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace;
+  text-align: center;
+}
+
+/* ---------- StartScreen ---------- */
+
+.start__title {
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.start__lead {
+  margin-top: 0.8em;
+  color: var(--text-muted);
+}
+
+.start__heading {
+  margin-top: 1.6em;
+  font-size: 1.05rem;
+}
+
+.controls {
+  display: grid;
+  gap: 0.7em;
+  margin: 0.7em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.controls li {
+  display: grid;
+  grid-template-columns: 13em 1fr;
+  align-items: center;
+  gap: 1em;
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.keys__or {
+  padding: 0 0.2em;
+  color: var(--text-muted);
+  font-size: 0.85em;
+}
+
+.start__actions {
+  margin-top: 1.8em;
+}
+
+.start__note {
+  margin-top: 1.2em;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 520px) {
+  .controls li {
+    grid-template-columns: 1fr;
+    gap: 0.3em;
+  }
+}
+
+/* ---------- HUD ---------- */
+
+.hud {
+  position: absolute;
+  top: 2.2cqw;
+  right: 2.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  padding: 0.45em 0.9em;
+  background: rgba(11, 16, 32, 0.84);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: clamp(11px, 1.9cqw, 18px);
+  font-weight: 700;
+  pointer-events: none; /* tidak menghalangi klik di kanvas */
+}
+
+.hud__label {
+  color: var(--accent);
+}
+
+.hud__value {
+  font-variant-numeric: tabular-nums;
+}
+
+.hud__dots {
+  display: flex;
+  gap: 0.3em;
+}
+
+.hud__dot {
+  width: 0.72em;
+  height: 0.72em;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px var(--border);
+  transition: background-color 0.2s ease;
+}
+
+.hud__dot--on {
+  background: var(--accent);
+  box-shadow: none;
+}
+
+/* ---------- Overlay di atas kanvas (dialog) ---------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 3cqw;
+  background: var(--overlay);
+  border-radius: 8px; /* sama dengan sudut kanvas */
+  font-size: clamp(13px, 1.9cqw, 18px);
+}
+
+/* ---------- ResultScreen ---------- */
+
+.result {
+  width: min(100%, 40rem);
+}
+
+.result__type {
+  margin-top: 0.1em;
+  color: var(--accent);
+  font-size: clamp(2.2rem, 7vw, 3.2rem);
+  line-height: 1.1;
+}
+
+.result__reason {
+  margin-top: 0.6em;
+  color: var(--text-muted);
+}
+
+.bars {
+  display: grid;
+  gap: 0.7em;
+  margin: 1.4em 0 1.6em;
+  padding: 0;
+  list-style: none;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 6.5em 1fr 1.5em;
+  align-items: center;
+  gap: 0.8em;
+}
+
+.bar__label {
+  font-weight: 600;
+}
+
+.bar__track {
+  display: block;
+  height: 0.9em;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--bar);
+}
+
+.bar__fill--top {
+  background: var(--accent);
+}
+
+.bar__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: right;
+}
+
+.result__heading {
+  margin: 1.4em 0 0.4em;
+  font-size: 1.1rem;
+}
+
+.result__note {
+  margin-top: 1.6em;
+  padding-top: 1em;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* ---------- DialogueBox ---------- */
+
+.dialogue {
+  width: min(100%, 38em);
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.dialogue:focus {
+  outline: none; /* fokus programatik saat dialog dibuka */
+}
+
+.dialogue__place {
+  margin: 0 0 0.5em;
+  color: var(--accent);
+  font-size: 0.95em;
+  font-weight: 700;
+}
+
+.dialogue__narrative {
+  line-height: 1.6;
+}
+
+.dialogue__question {
+  margin-top: 1em;
+  color: var(--text-muted);
+}
+
+.choices {
+  display: grid;
+  gap: 0.6em;
+  margin-top: 0.7em;
+}
+
+/* Ketiga opsi harus tampil identik agar tidak ada yang tampak lebih diunggulkan */
+.choice {
+  appearance: none;
+  width: 100%;
+  padding: 0.8em 1em;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.12s ease;
+}
+
+.choice:hover {
+  border-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
