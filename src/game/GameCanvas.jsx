@@ -1,59 +1,72 @@
-// GameCanvas.jsx - pembungkus kanvas. Props: onTrigger, paused, activeZoneIds (SRS 3.3). Dev 1.
-import { useEffect, useRef } from 'react';
-import GameEngine from './GameEngine.js';
+// =====================================================================
+// GameCanvas.jsx — pembungkus kanvas untuk React
+// Domain DEV 1 (feature/canvas-engine)
+//
+// Props (kontrak SRS 3.3):
+//   onTrigger(scenarioId)   Canvas -> React
+//   paused                  React  -> Canvas
+//   activeZoneIds           React  -> Canvas
+//   onSound(name)           Canvas -> React   ("door")
+//   onSceneChange(sceneId)  Canvas -> React   (opsional)
+//
+// Engine dibuat sekali per mount. Callback disimpan di ref sehingga
+// perubahan fungsi dari parent tidak membuat engine dibuat ulang, dan
+// di StrictMode (mount -> unmount -> mount) engine pertama dihancurkan
+// sebelum asetnya selesai dimuat, jadi callback tidak terpanggil ganda.
+// =====================================================================
+import { useEffect, useRef } from "react";
+import GameEngine from "./GameEngine.js";
 
-const W = 960, H = 640;
-
-export default function GameCanvas({ onTrigger, paused = false, activeZoneIds = [] }) {
+export default function GameCanvas({ onTrigger, paused = false, activeZoneIds = [], onSound, onSceneChange, debug }) {
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
-  const triggerRef = useRef(onTrigger);
-  triggerRef.current = onTrigger; // selalu memakai callback terbaru
+  const callbacksRef = useRef({});
+  callbacksRef.current = { onTrigger, onSound, onSceneChange };
 
-  // buat engine sekali; cleanup menghentikan loop & listener (aman untuk StrictMode)
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
+  const zonesRef = useRef(activeZoneIds);
+  zonesRef.current = activeZoneIds;
+
   useEffect(() => {
-    const engine = new GameEngine(canvasRef.current, {
-      onTrigger: (id) => triggerRef.current && triggerRef.current(id),
-    });
-    engineRef.current = engine;
+    const showDebug =
+      debug ?? (typeof window !== "undefined" && new URLSearchParams(window.location.search).has("debug"));
+    const engine = new GameEngine(
+      canvasRef.current,
+      {
+        onTrigger: (id) => callbacksRef.current.onTrigger?.(id),
+        onSound: (name) => callbacksRef.current.onSound?.(name),
+        onSceneChange: (id) => callbacksRef.current.onSceneChange?.(id),
+      },
+      { debug: showDebug }
+    );
+    engine.setPaused(pausedRef.current);
+    engine.setActiveZoneIds(zonesRef.current);
     engine.start();
+    engineRef.current = engine;
+    if (import.meta.env?.DEV) window.__kypEngine = engine; // hanya mode dev: untuk QA/debug di console
     return () => {
-      engine.stop();
-      engineRef.current = null;
+      engine.destroy();
+      if (engineRef.current === engine) engineRef.current = null;
     };
-  }, []);
+  }, [debug]);
 
   useEffect(() => {
-    engineRef.current && engineRef.current.setPaused(paused);
+    engineRef.current?.setPaused(paused);
   }, [paused]);
 
-  const zoneKey = activeZoneIds.join('|');
   useEffect(() => {
-    engineRef.current && engineRef.current.setActiveZones(activeZoneIds);
-  }, [zoneKey]); // eslint-disable-line react-hooks/exhaustive-deps
+    engineRef.current?.setActiveZoneIds(activeZoneIds);
+  }, [activeZoneIds]);
 
   return (
-    <div
-      style={{
-        position: 'relative',
-        width: 'min(100%, calc((100vh - 16px) * 1.5))', // rasio 3:2 tetap, muat di layar
-        aspectRatio: `${W} / ${H}`,
-        margin: '0 auto',
-      }}
-    >
-      <canvas
-        ref={canvasRef}
-        width={W}
-        height={H}
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'block',
-          imageRendering: 'pixelated',
-          background: '#1b2a1f',
-          borderRadius: 8,
-        }}
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className="game-canvas"
+      width={960}
+      height={640}
+      tabIndex={0}
+      aria-label="Area permainan: gerak dengan W A S D atau panah, interaksi dengan Spasi"
+    />
   );
 }
