@@ -40,6 +40,7 @@ export default function DialogueBox({ scenarioId, onSelect }) {
               key={option.text}
               type="button"
               className="choice"
+              data-sfx="off" /* suara "selesai" diputar oleh App.jsx, bukan suara klik biasa */
               onClick={() => onSelect(option.type)}
             >
               {option.text}
