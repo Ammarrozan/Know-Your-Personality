@@ -67,6 +67,22 @@ p {
   container-type: inline-size; /* satuan cqw: teks overlay ikut mengecil bersama kanvas */
 }
 
+/* Pembungkus App: tidak memengaruhi tata letak (dipakai untuk menangkap klik) */
+.root {
+  display: contents;
+}
+
+/* Kanvas milik Dev 1 (960x640, rasio 3:2) mengisi lebar .stage */
+.game-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  background: #1b2a1f;
+  border-radius: 8px;
+  image-rendering: pixelated;
+}
+
 /* ---------- Komponen umum ---------- */
 
 .panel {
@@ -135,21 +151,124 @@ kbd {
   text-align: center;
 }
 
-/* ---------- StartScreen ---------- */
+/* ---------- Layar menu (Home, Tutorial, Pengaturan, Tentang, Hasil) ---------- */
 
-.start__title {
-  font-size: clamp(1.9rem, 5vw, 2.6rem);
-  line-height: 1.15;
+.menu-screen {
+  position: relative;
+  padding: 1em 0;
 }
 
-.start__lead {
-  margin-top: 0.8em;
+/* Latar bergaya game; dipasang fixed supaya mengisi seluruh jendela */
+.menu-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at center, rgba(11, 16, 32, 0.6) 0%, rgba(11, 16, 32, 0.15) 70%),
+    url("/assets/bg_home.jpg") center / cover no-repeat,
+    var(--bg);
+}
+
+.home {
+  width: min(100%, 34rem);
+  text-align: center;
+}
+
+.home__eyebrow {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home__title {
+  margin: 0.25em 0 0.2em;
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  line-height: 1.1;
+}
+
+.home__tagline {
   color: var(--text-muted);
 }
 
-.start__heading {
-  margin-top: 1.6em;
+.menu {
+  display: grid;
+  gap: 0.7em;
+  width: min(100%, 20rem);
+  margin: 2em auto 0;
+}
+
+.menu__item {
+  appearance: none;
+  padding: 0.85em 1.2em;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
   font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.menu__item:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.menu__item--primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.menu__item--primary:hover {
+  border-color: transparent;
+  background: var(--accent-strong);
+}
+
+.home__note {
+  margin-top: 2em;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* ---------- Halaman (Tutorial, Pengaturan, Tentang) ---------- */
+
+.page {
+  width: min(100%, 40rem);
+}
+
+.page__title {
+  margin-bottom: 0.5em;
+  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  line-height: 1.15;
+}
+
+.page__heading {
+  margin: 1.4em 0 0.4em;
+  font-size: 1.05rem;
+}
+
+.page__note {
+  margin-top: 1.4em;
+  padding-top: 1em;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.steps {
+  display: grid;
+  gap: 0.55em;
+  margin: 0.6em 0 0;
+  padding-left: 1.3em;
+  color: var(--text-muted);
 }
 
 .controls {
@@ -180,21 +299,47 @@ kbd {
   font-size: 0.85em;
 }
 
-.start__actions {
-  margin-top: 1.8em;
-}
-
-.start__note {
-  margin-top: 1.2em;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
 @media (max-width: 520px) {
   .controls li {
     grid-template-columns: 1fr;
     gap: 0.3em;
   }
+}
+
+/* ---------- Pengaturan ---------- */
+
+.setting {
+  margin-top: 1.2em;
+}
+
+.setting__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.setting__label {
+  font-weight: 600;
+}
+
+.setting__value {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.setting__check {
+  width: 1.3em;
+  height: 1.3em;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.setting__range {
+  width: 100%;
+  margin-top: 0.5em;
+  accent-color: var(--accent);
+  cursor: pointer;
 }
 
 /* ---------- HUD ---------- */
@@ -240,6 +385,30 @@ kbd {
 .hud__dot--on {
   background: var(--accent);
   box-shadow: none;
+}
+
+/* ---------- Tombol suara di area game ---------- */
+
+.sound-toggle {
+  position: absolute;
+  top: 2.2cqw;
+  left: 2.2cqw;
+  display: grid;
+  place-items: center;
+  width: 2.6em;
+  height: 2.6em;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(11, 16, 32, 0.84);
+  color: var(--text);
+  font-size: clamp(11px, 1.9cqw, 18px);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sound-toggle:hover {
+  border-color: var(--accent);
 }
 
 /* ---------- Overlay di atas kanvas (dialog) ---------- */
