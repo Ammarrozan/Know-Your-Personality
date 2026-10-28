@@ -1,4 +1,8 @@
-// scenarios.js - 12 skenario, satu per zona di peta. Domain Dev 2.
+// scenarios.js - 12 skenario aktif (cocok dengan 12 zona engine lama). Domain Dev 2.
+// STATUS SEMENTARA: kantin_01 dan perpustakaan_01 sudah bertema SEKOLAH (batch 1).
+// 10 skenario lain masih bertema kampus dan akan diganti di batch berikutnya.
+// `skenarioMenunggu` BELUM dipakai: ID-nya belum punya zona di engine lama. Gabungkan
+// ke `scenarios` saat engine baru Dev 1 sudah masuk (jangan sebelumnya, game bisa macet).
 // Skema: { id, title, narrative, options: [{ text, type }] }, dengan type "I" | "E" | "A".
 // id HARUS identik dengan id zona di src/game/mapData.js.
 //
@@ -12,24 +16,24 @@
 export const scenarios = [
   {
     id: "kantin_01",
-    title: "Kantin",
+    title: "Antrean Kantin",
     narrative:
-      "Jam istirahat siang, kantin ramai oleh obrolan dan bunyi sendok beradu dengan piring. Kamu membawa nampan makan siang sambil mencari tempat duduk. Di meja panjang, teman-teman satu angkatan sedang tertawa. Di dekat jendela, ada satu bangku kosong yang tenang.",
+      "Bel istirahat berbunyi dan kantin langsung penuh. Antrean di depan stan mi ayam mengular sampai dekat pintu, dan aroma kuah panas memenuhi udara. Di belakangmu, seorang teman sekelas yang jarang mengobrol denganmu ikut mengantre. Dia melirik ke arahmu sambil tersenyum tipis.",
     options: [
-      { text: "Aku duduk di bangku pojok dan makan dengan tenang.", type: "I" },
-      { text: "Aku bergabung di meja panjang dan ikut bercerita ramai.", type: "E" },
-      { text: "Aku memilih sesuai suasana hatiku: meja panjang atau pojok.", type: "A" },
+      { text: "Aku menyapanya dan mengajaknya mengobrol selama kami mengantre.", type: "E" },
+      { text: "Aku membalas senyumnya, lalu menunggu giliran sambil memandang menu.", type: "I" },
+      { text: "Aku mengobrol sebentar kalau dia membuka percakapan lebih dulu.", type: "A" },
     ],
   },
   {
     id: "perpustakaan_01",
-    title: "Perpustakaan",
+    title: "Rak Buku",
     narrative:
-      "Perpustakaan lantai dua cukup lengang sore ini, hanya terdengar halaman buku dibalik dan dengung kipas. Kamu punya tugas yang harus dikumpulkan lusa. Di meja diskusi dekat rak, beberapa teman sekelas sedang membahas tugas yang sama dan melambaikan tangan padamu.",
+      "Kamu mencari buku referensi untuk tugas sejarah di rak paling ujung perpustakaan. Udara terasa sejuk dan hanya terdengar dengung kipas serta halaman yang dibalik. Di rak yang sama, seorang teman satu angkatan sedang mencari buku dan menoleh padamu sambil tersenyum. Sepertinya topik yang dia cari mirip dengan topikmu.",
     options: [
-      { text: "Aku pindah ke meja mereka dan membahas tugas bersama.", type: "E" },
-      { text: "Aku belajar sendiri dulu, lalu bergabung setelah punya bahan.", type: "A" },
-      { text: "Aku tetap belajar sendiri dan bertanya kepada mereka bila perlu.", type: "I" },
+      { text: "Aku membalas senyumnya lalu kembali fokus mencari bukuku.", type: "I" },
+      { text: "Aku mengajaknya berdiskusi tentang topik yang kami cari.", type: "E" },
+      { text: "Aku menyapa dulu, lalu mengobrol bila dia melanjutkan percakapan.", type: "A" },
     ],
   },
   {
@@ -140,6 +144,54 @@ export const scenarios = [
       { text: "Aku menyiapkan poin utama, lalu mengembangkannya lewat obrolan.", type: "A" },
       { text: "Aku langsung menjelaskan dengan antusias sambil berdiskusi dua arah.", type: "E" },
       { text: "Aku menyiapkan catatan tertulis dan menjelaskan secara runtut.", type: "I" },
+    ],
+  },
+];
+
+// Skenario sekolah yang menunggu engine baru Dev 1 (interior gedung). Belum diimpor di mana pun.
+export const skenarioMenunggu = [
+  {
+    id: "kantin_02",
+    title: "Meja Makan",
+    narrative:
+      "Jam istirahat siang, kantin penuh oleh obrolan dan bunyi sendok beradu dengan piring. Kamu membawa nampan berisi nasi dan es teh sambil mencari tempat duduk. Di meja panjang, teman-teman sekelas sedang tertawa sambil berbagi gorengan. Di dekat jendela, ada satu bangku kosong yang diterangi sinar matahari.",
+    options: [
+      { text: "Aku duduk di bangku dekat jendela dan makan dengan tenang.", type: "I" },
+      { text: "Aku memilih sesuai suasana hatiku, meja panjang atau dekat jendela.", type: "A" },
+      { text: "Aku bergabung di meja panjang dan ikut bercerita ramai.", type: "E" },
+    ],
+  },
+  {
+    id: "kantin_03",
+    title: "Stan Minuman",
+    narrative:
+      "Kamu sampai di stan minuman saat ibu penjual sedang menyiapkan pesanan. Dia mengenal hampir semua siswa dan sering bercerita tentang hal-hal kecil di sekolah. Hari ini dia menyapamu dan bertanya bagaimana harimu. Antrean di belakangmu hanya tinggal dua orang.",
+    options: [
+      { text: "Aku menyesuaikan lamanya obrolan dengan suasana di stan itu.", type: "A" },
+      { text: "Aku menjawab singkat, tersenyum, lalu membawa pesananku ke meja.", type: "I" },
+      { text: "Aku bercerita panjang tentang hariku dan balik bertanya kabarnya.", type: "E" },
+    ],
+  },
+  {
+    id: "perpustakaan_02",
+    title: "Meja Baca Bersama",
+    narrative:
+      "Di meja baca besar di tengah ruangan, sekelompok teman sedang berdiskusi pelan untuk persiapan ulangan. Salah satu dari mereka melihatmu dan menggeser kursi, mengisyaratkan tempat kosong di sebelahnya. Kamu juga perlu belajar untuk ulangan yang sama. Suasana perpustakaan sore itu hangat dan tenang.",
+    options: [
+      { text: "Aku bergabung sebentar untuk bertukar catatan, lalu belajar sendiri.", type: "A" },
+      { text: "Aku duduk bersama mereka dan ikut membahas soal bersama-sama.", type: "E" },
+      { text: "Aku berterima kasih lalu belajar di meja kecil di sudut.", type: "I" },
+    ],
+  },
+  {
+    id: "perpustakaan_03",
+    title: "Meja Petugas",
+    narrative:
+      "Kamu ingin meminjam dua buku di meja petugas perpustakaan. Petugas tampak sibuk menyusun kartu, tetapi tersenyum begitu melihatmu datang. Dia bertanya buku itu untuk keperluan apa dan menawarkan rekomendasi buku lain yang mungkin kamu suka. Di belakangmu tidak ada siswa lain yang mengantre.",
+    options: [
+      { text: "Aku bercerita tentang tugasku dan bertanya rekomendasi buku lainnya.", type: "E" },
+      { text: "Aku menjawab singkat, mencatat rekomendasinya, lalu meminjam bukuku.", type: "I" },
+      { text: "Aku mengobrol sebentar, lalu menyesuaikan dengan kesibukan petugas.", type: "A" },
     ],
   },
 ];
