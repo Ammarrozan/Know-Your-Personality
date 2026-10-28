@@ -1,15 +1,15 @@
-// ResultScreen.jsx - skor, tipe dominan, teks edukasi, dan tombol Main Ulang. Domain Dev 2.
+// ResultScreen.jsx - skor, tipe dominan, teks edukasi, Main Lagi, dan Kembali ke Home. Domain Dev 2.
+// Gaya visual sama dengan Home Screen (REQ-F24).
 import { getResult, getAmbivertReason } from '../utils/gameLogic.js';
 import { resultContent } from '../data/results.js';
 
-const MAX_SCORE = 9; // jumlah skenario per permainan = skala batang 0-9
 const TYPES = [
   { key: 'I', label: 'Introvert' },
   { key: 'E', label: 'Ekstrovert' },
   { key: 'A', label: 'Ambivert' },
 ];
 
-export default function ResultScreen({ score, onRestart }) {
+export default function ResultScreen({ score, total = 9, onRestart, onHome }) {
   const result = getResult(score);
   const content = resultContent[result];
   const top = Math.max(score.I, score.E, score.A);
@@ -17,9 +17,10 @@ export default function ResultScreen({ score, onRestart }) {
   const reason = result === 'Ambivert' ? getAmbivertReason(score) : '';
 
   return (
-    <main className="app">
+    <main className="app menu-screen">
       <section className="panel result" aria-labelledby="result-type">
-        <p className="muted">Kecenderungan dari pilihanmu di {MAX_SCORE} situasi</p>
+        <p className="home__eyebrow">Hasil permainan</p>
+        <p className="muted">Kecenderungan dari pilihanmu di {total} situasi</p>
         <h1 className="result__type" id="result-type">
           {result}
         </h1>
@@ -32,10 +33,10 @@ export default function ResultScreen({ score, onRestart }) {
               <span className="bar__track" aria-hidden="true">
                 <span
                   className={score[key] === top ? 'bar__fill bar__fill--top' : 'bar__fill'}
-                  style={{ width: `${(score[key] / MAX_SCORE) * 100}%` }}
+                  style={{ width: `${(score[key] / total) * 100}%` }}
                 />
               </span>
-              <span className="bar__value" aria-label={`${score[key]} dari ${MAX_SCORE}`}>
+              <span className="bar__value" aria-label={`${score[key]} dari ${total}`}>
                 {score[key]}
               </span>
             </li>
@@ -58,7 +59,10 @@ export default function ResultScreen({ score, onRestart }) {
 
         <div className="panel__actions">
           <button type="button" className="btn" onClick={onRestart}>
-            Main Ulang
+            Main Lagi
+          </button>
+          <button type="button" className="btn btn--ghost" onClick={onHome}>
+            Kembali ke Home
           </button>
         </div>
       </section>
