@@ -1,6 +1,8 @@
 // HUD.jsx - indikator sisa Action Points (AP) dan tombol suara di area game. Domain Dev 2.
 // Harus diletakkan di dalam kontainer position: relative (.stage di App.jsx).
 
+import SoundIcon from './SoundIcon.jsx';
+
 export default function HUD({ ap, total = 9, muted = false, onToggleMute }) {
   return (
     <>
@@ -27,7 +29,7 @@ export default function HUD({ ap, total = 9, muted = false, onToggleMute }) {
         onMouseDown={(e) => e.preventDefault()}
         onClick={onToggleMute}
       >
-        <span aria-hidden="true">{muted ? '🔇' : '🔊'}</span>
+        <SoundIcon muted={muted} />
       </button>
     </>
   );

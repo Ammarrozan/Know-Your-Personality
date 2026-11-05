@@ -8,6 +8,7 @@ import TutorialScreen from './components/TutorialScreen.jsx';
 import SettingsScreen from './components/SettingsScreen.jsx';
 import AboutScreen from './components/AboutScreen.jsx';
 import DialogueBox from './components/DialogueBox.jsx';
+import SoundIcon from './components/SoundIcon.jsx';
 import ResultScreen from './components/ResultScreen.jsx';
 import useAudioState from './audio/useAudioState.js';
 import audio from './audio/AudioManager.js';
@@ -115,7 +116,7 @@ export default function App() {
     content = <ResultScreen score={score} total={TOTAL_AP} onRestart={startGame} onHome={goHome} />;
   } else {
     content = (
-      <div className="app">
+      <div className="app game-screen">
         <div className="stage">
           <GameCanvas
             paused={paused}
@@ -135,6 +136,17 @@ export default function App() {
   return (
     <div className="root" onClickCapture={handleClickCapture}>
       {content}
+      {screen !== 'playing' && (
+        <button
+          type="button"
+          className="menu-sound"
+          aria-label={muted ? 'Nyalakan suara' : 'Bisukan suara'}
+          aria-pressed={muted}
+          onClick={() => audio.toggleMuted()}
+        >
+          <SoundIcon muted={muted} />
+        </button>
+      )}
     </div>
   );
 }

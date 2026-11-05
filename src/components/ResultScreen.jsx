@@ -18,38 +18,47 @@ export default function ResultScreen({ score, total = 9, onRestart, onHome }) {
 
   return (
     <main className="app menu-screen">
-      <section className="panel result" aria-labelledby="result-type">
-        <p className="home__eyebrow">Hasil permainan</p>
-        <p className="muted">Kecenderungan dari pilihanmu di {total} situasi</p>
-        <h1 className="result__type" id="result-type">
-          {result}
-        </h1>
-        {reason && <p className="result__reason">{reason}</p>}
+      <section className="panel page page--result" aria-labelledby="result-type">
+        <div className="result__grid">
+          <div className="result__main">
+            <p className="home__eyebrow">Hasil permainan</p>
+            <p className="muted">Kecenderungan dari pilihanmu di {total} situasi</p>
+            <h1 className="result__type" id="result-type">
+              {result}
+            </h1>
+            {reason && <p className="result__reason">{reason}</p>}
 
-        <ul className="bars" aria-label="Skor akhir">
-          {TYPES.map(({ key, label }) => (
-            <li key={key} className="bar">
-              <span className="bar__label">{label}</span>
-              <span className="bar__track" aria-hidden="true">
-                <span
-                  className={score[key] === top ? 'bar__fill bar__fill--top' : 'bar__fill'}
-                  style={{ width: `${(score[key] / total) * 100}%` }}
-                />
-              </span>
-              <span className="bar__value" aria-label={`${score[key]} dari ${total}`}>
-                {score[key]}
-              </span>
-            </li>
-          ))}
-        </ul>
+            <ul className="bars" aria-label="Skor akhir">
+              {TYPES.map(({ key, label }) => (
+                <li key={key} className="bar">
+                  <span className="bar__label">{label}</span>
+                  <span className="bar__track" aria-hidden="true">
+                    <span
+                      className={score[key] === top ? 'bar__fill bar__fill--top' : 'bar__fill'}
+                      style={{ width: `${(score[key] / total) * 100}%` }}
+                    />
+                  </span>
+                  <span className="bar__value" aria-label={`${score[key]} dari ${total}`}>
+                    {score[key]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <h2 className="result__heading">Kekuatan</h2>
-        <p>{content.strengths}</p>
-
-        <h2 className="result__heading">Mitos dan faktanya</h2>
-        <p>
-          <strong>Mitos:</strong> {content.myth} <strong>Faktanya:</strong> {content.fact}
-        </p>
+          <div className="result__side">
+            <div className="card">
+              <h2 className="result__heading">Kekuatan</h2>
+              <p>{content.strengths}</p>
+            </div>
+            <div className="card">
+              <h2 className="result__heading">Mitos dan faktanya</h2>
+              <p>
+                <strong>Mitos:</strong> {content.myth} <strong>Faktanya:</strong> {content.fact}
+              </p>
+            </div>
+          </div>
+        </div>
 
         <p className="result__note">
           Hasil ini adalah refleksi ringan dari pilihanmu di dalam game, bukan tes psikologi
@@ -57,12 +66,12 @@ export default function ResultScreen({ score, total = 9, onRestart, onHome }) {
           kecenderungan seseorang bisa berubah menurut situasi dan waktu.
         </p>
 
-        <div className="panel__actions">
-          <button type="button" className="btn" onClick={onRestart}>
-            Main Lagi
-          </button>
+        <div className="panel__actions panel__actions--end">
           <button type="button" className="btn btn--ghost" onClick={onHome}>
             Kembali ke Home
+          </button>
+          <button type="button" className="btn" onClick={onRestart}>
+            Main Lagi
           </button>
         </div>
       </section>

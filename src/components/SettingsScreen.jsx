@@ -8,7 +8,7 @@ export default function SettingsScreen({ onBack }) {
 
   return (
     <main className="app menu-screen">
-      <section className="panel page" aria-labelledby="settings-title">
+      <section className="panel page page--narrow" aria-labelledby="settings-title">
         <h1 className="page__title" id="settings-title">
           Pengaturan
         </h1>
@@ -67,7 +67,7 @@ export default function SettingsScreen({ onBack }) {
           lewat tombol speaker di dalam permainan.
         </p>
 
-        <div className="panel__actions">
+        <div className="panel__actions panel__actions--end">
           <button type="button" className="btn" onClick={onBack}>
             Kembali
           </button>

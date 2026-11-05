@@ -5,7 +5,16 @@ export default function StartScreen({ onPlay, onTutorial, onSettings, onAbout })
     <main className="app menu-screen">
       <section className="home">
         <p className="home__eyebrow">Game edukasi untuk siswa SMA/SMK</p>
-        <h1 className="home__title">Know Your Personality?</h1>
+
+        <h1 className="home__title" aria-label="Know Your Personality?">
+          <span className="title__small" data-text="Know Your" aria-hidden="true">
+            Know Your
+          </span>
+          <span className="title__big" data-text="Personality?" aria-hidden="true">
+            Personality?
+          </span>
+        </h1>
+
         <p className="home__tagline">
           Jalani satu hari di sekolah dan temukan kecenderungan sosialmu.
         </p>
