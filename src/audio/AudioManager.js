@@ -7,9 +7,17 @@
 // "/assets/audio/nama-file.mp3", lalu perbarui AUDIO_CREDIT dengan sumber dan lisensinya
 // (hanya pakai lisensi yang mengizinkan, misalnya CC0, dan verifikasi sendiri).
 
-export const BGM_FILE = null;
+export const BGM_FILE = '/assets/audio/bgm.mp3';
 export const AUDIO_CREDIT =
   'Musik latar dan efek suara dibuat dengan kode menggunakan Web Audio API, tanpa file audio pihak ketiga.';
+
+// Efek suara dari FILE (opsional). Kunci = nama efek, nilai = alamat file di folder public/.
+// Contoh: file public/assets/audio/door.mp3 dipanggil lewat "/assets/audio/door.mp3".
+// Bila file tidak ada atau gagal dimuat, otomatis dipakai suara sintesis bawaan (tanpa error).
+// Jika memakai file dari pihak lain, perbarui AUDIO_CREDIT di atas dengan sumber dan lisensinya.
+export const SFX_FILES = {
+  door: '/assets/audio/door.mp3',
+};
 
 const BPM = 84;
 const BEAT = 60 / BPM;
@@ -32,6 +40,7 @@ class AudioManager {
     this.master = null;
     this.musicGain = null;
     this.sfxGain = null;
+    this.sfxBuffers = {};
     this.bgmTimer = null;
     this.bgmFile = null;
     this.nextBarTime = 0;
@@ -104,10 +113,35 @@ class AudioManager {
       this.master.connect(this.ctx.destination);
       this.applyVolumes();
       document.addEventListener('visibilitychange', this.onVisibility);
+      this.loadSfxFiles();
     }
     if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
     if (this.bgmWanted) this.startBgm();
     return true;
+  }
+
+  // Memuat dan mendekode file SFX. Kegagalan (file tidak ada, format tidak didukung) diabaikan,
+  // sehingga playSfx memakai suara sintesis sebagai cadangan.
+  loadSfxFiles() {
+    Object.entries(SFX_FILES).forEach(([name, url]) => {
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.arrayBuffer();
+        })
+        .then((data) => this.ctx.decodeAudioData(data))
+        .then((buffer) => {
+          this.sfxBuffers[name] = buffer;
+        })
+        .catch(() => {});
+    });
+  }
+
+  playBuffer(buffer) {
+    const src = this.ctx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(this.sfxGain); // ikut volume efek suara dan tombol mute
+    src.start(this.ctx.currentTime + 0.01);
   }
 
   onVisibility() {
@@ -169,6 +203,10 @@ class AudioManager {
   // ---------- efek suara ----------
   playSfx(name) {
     if (!this.ctx || this.ctx.state === 'closed') return;
+    if (this.sfxBuffers[name]) {
+      this.playBuffer(this.sfxBuffers[name]);
+      return;
+    }
     const t = this.ctx.currentTime + 0.01;
     switch (name) {
       case 'click':
