@@ -27,7 +27,7 @@ export default function GuideScreen({ totalAp = 9, onBack }) {
               </li>
               <li>
                 Perangkat: laptop/PC dengan peramban Chrome, Edge, atau Firefox. HP/tablet juga bisa
-                dipakai dengan tombol di layar.
+                dipakai dengan analog dan tombol Aksi di layar.
               </li>
               <li>Perkiraan waktu: 15–20 menit bermain dan 15–20 menit diskusi.</li>
             </ul>

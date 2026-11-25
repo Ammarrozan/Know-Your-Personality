@@ -1029,15 +1029,36 @@ kbd {
     visibility: hidden;
   }
 
-  .touch__pad {
-    --touch: 52px;
-    display: grid;
-    grid-template-columns: repeat(3, var(--touch));
-    grid-template-rows: repeat(3, var(--touch));
-    gap: 4px;
+  .joystick {
+    --joy: 132px;
+    position: relative;
+    width: var(--joy);
+    height: var(--joy);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 215, 64, 0.55);
+    background: radial-gradient(circle, rgba(13, 19, 46, 0.55) 0%, rgba(13, 19, 46, 0.8) 70%);
+    box-shadow: 0 0.3em 0.9em rgba(0, 0, 0, 0.4);
+    pointer-events: auto;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .touch__btn,
+  .joystick__knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(var(--joy) * 0.44);
+    height: calc(var(--joy) * 0.44);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff6b0, #ffc107 70%, #e0a000);
+    box-shadow: 0 0.25em 0.6em rgba(0, 0, 0, 0.45);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
   .touch__action {
     pointer-events: auto;
     touch-action: none;
@@ -1051,38 +1072,9 @@ kbd {
     box-shadow: 0 0.3em 0.9em rgba(0, 0, 0, 0.4);
   }
 
-  .touch__btn {
-    display: grid;
-    place-items: center;
-    padding: 0;
-    border-radius: 14px;
-  }
-
-  .touch__btn svg {
-    width: 26px;
-    height: 26px;
-  }
-
-  .touch__btn:active,
   .touch__action:active {
     background: rgba(255, 215, 64, 0.85);
     color: var(--ink);
-  }
-
-  .touch__btn--up {
-    grid-area: 1 / 2;
-  }
-
-  .touch__btn--left {
-    grid-area: 2 / 1;
-  }
-
-  .touch__btn--right {
-    grid-area: 2 / 3;
-  }
-
-  .touch__btn--down {
-    grid-area: 3 / 2;
   }
 
   .touch__action {
@@ -1098,8 +1090,8 @@ kbd {
 
 /* HP mendatar: tombol sedikit lebih kecil supaya tidak banyak menutupi peta */
 @media (hover: none) and (pointer: coarse) and (max-height: 500px) {
-  .touch__pad {
-    --touch: 44px;
+  .joystick {
+    --joy: 112px;
   }
 
   .touch__action {
