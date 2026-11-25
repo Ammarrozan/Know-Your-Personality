@@ -17,7 +17,7 @@ Proyek media edukasi oleh Yardan Raditya Laksana dan Ammar Rozan Annafi, Pendidi
 - Musik latar dan efek suara, dengan pengaturan volume dan tombol bisu
 - Tujuan pembelajaran di Cara Bermain dan Panduan Guru (langkah di kelas, persiapan, etika penggunaan)
 - Tombol Keluar (atau `Esc`) dengan konfirmasi untuk kembali ke Home
-- Bisa dimainkan di HP/tablet dengan tombol arah dan tombol Aksi di layar (paling nyaman dalam posisi mendatar)
+- Bisa dimainkan di HP/tablet dengan analog dan tombol Aksi di layar (paling nyaman dalam posisi mendatar)
 
 ## Teknologi
 
@@ -57,7 +57,7 @@ Mode debug: buka `http://localhost:5173/?debug=1` untuk melihat kotak tembok (me
 | `Spasi` | Berinteraksi dengan titik bertanda "!" |
 | Klik / `1` `2` `3` | Memilih jawaban |
 | `Esc` | Keluar ke Home |
-| Tombol arah + Aksi di layar | Kontrol di HP/tablet |
+| Analog + tombol Aksi di layar | Kontrol di HP/tablet |
 
 ## Struktur folder
 

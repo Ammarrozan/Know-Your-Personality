@@ -84,7 +84,7 @@ export default function TutorialScreen({ totalAp = 9, onBack, onPlay }) {
                 <span className="keys">
                   <kbd>HP/tablet</kbd>
                 </span>
-                <span>Tombol arah di kiri bawah, tombol Aksi di kanan bawah</span>
+                <span>Analog di kiri bawah (geser ke arah tujuan), tombol Aksi di kanan bawah</span>
               </li>
             </ul>
           </div>
