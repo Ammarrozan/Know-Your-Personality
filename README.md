@@ -4,17 +4,20 @@ Game edukasi 2D berbasis web untuk siswa SMA/SMK. Pemain menjalani satu hari di 
 
 > Hasil permainan adalah refleksi ringan dari pilihan pemain, **bukan tes psikologi tervalidasi** dan tidak untuk diagnosis.
 
-Proyek media edukasi, Pendidikan Teknik Informatika dan Komputer (PTIK).
+Proyek media edukasi oleh Yardan Raditya Laksana dan Ammar Rozan Annafi, Pendidikan Teknik Informatika dan Komputer, Universitas Sebelas Maret.
 
 ## Fitur
 
-- Home bergaya game: Main, Cara Bermain, Pengaturan, Tentang
+- Home bergaya game: Main, Cara Bermain, Panduan Guru, Pengaturan, Tentang, beserta identitas pengembang
 - Peta sekolah dengan kamera yang mengikuti pemain, 4 gedung yang bisa dimasuki (Kantin, Perpustakaan, Ruang Kelas, Lab Komputer), serta area luar seperti lapangan dan taman
 - 20 titik interaksi (TI): 3 di setiap gedung, objek di area luar, dan 3 NPC yang berjalan acak
 - 9 Action Points (AP): pemain memilih sendiri 9 dari 20 situasi yang ingin dijawab
 - Setiap situasi punya 3 jawaban (I, E, A) yang urutannya diacak dan tanpa label tipe
 - Layar hasil: tipe dominan, grafik skor, teks kekuatan, serta mitos dan fakta
 - Musik latar dan efek suara, dengan pengaturan volume dan tombol bisu
+- Tujuan pembelajaran di Cara Bermain dan Panduan Guru (langkah di kelas, persiapan, etika penggunaan)
+- Tombol Keluar (atau `Esc`) dengan konfirmasi untuk kembali ke Home
+- Bisa dimainkan di HP/tablet dengan tombol arah dan tombol Aksi di layar (paling nyaman dalam posisi mendatar)
 
 ## Teknologi
 
@@ -53,6 +56,8 @@ Mode debug: buka `http://localhost:5173/?debug=1` untuk melihat kotak tembok (me
 | `W` `A` `S` `D` / tombol panah | Berjalan |
 | `Spasi` | Berinteraksi dengan titik bertanda "!" |
 | Klik / `1` `2` `3` | Memilih jawaban |
+| `Esc` | Keluar ke Home |
+| Tombol arah + Aksi di layar | Kontrol di HP/tablet |
 
 ## Struktur folder
 
@@ -92,8 +97,8 @@ Gambar peta dan hitbox akan dibuat ulang bersamaan sehingga tetap sinkron. ID ti
 
 | Peran | Tanggung jawab | Branch |
 | :-- | :-- | :-- |
-| Dev 1 | Peta, tumbukan, engine Canvas, kamera, NPC, input | `feature/map-collisions`, `feature/canvas-engine` |
-| Dev 2 | UI React, state game, skenario, layar hasil, audio | `feature/react-ui-state` |
+| Dev 1 (Yardan Raditya Laksana) | Peta, tumbukan, engine Canvas, kamera, NPC, input | `feature/map-collisions`, `feature/canvas-engine` |
+| Dev 2 (Ammar Rozan Annafi) | UI React, state game, skenario, layar hasil, audio | `feature/react-ui-state` |
 
 Semua fitur digabung ke `development` lewat pull request. `main` berisi versi stabil.
 

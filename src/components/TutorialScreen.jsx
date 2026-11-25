@@ -1,4 +1,5 @@
-// TutorialScreen.jsx - cara bermain: tujuan, langkah, dan kontrol. Domain Dev 2.
+// TutorialScreen.jsx - cara bermain: tujuan pembelajaran, langkah, dan kontrol. Domain Dev 2.
+import { LEARNING_OBJECTIVES } from '../data/learning.js';
 
 export default function TutorialScreen({ totalAp = 9, onBack, onPlay }) {
   return (
@@ -34,12 +35,12 @@ export default function TutorialScreen({ totalAp = 9, onBack, onPlay }) {
           </div>
 
           <div className="tutorial__col">
-            <h2 className="page__heading">Tujuan</h2>
-            <p className="muted">
-              Jalani satu hari di sekolah. Di setiap tempat dan percakapan, kamu memilih apa yang
-              akan kamu lakukan, dan pilihanmu menunjukkan kecenderungan sosialmu: Introvert,
-              Ekstrovert, atau Ambivert.
-            </p>
+            <h2 className="page__heading">Tujuan pembelajaran</h2>
+            <ul className="list">
+              {LEARNING_OBJECTIVES.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
 
             <h2 className="page__heading">Kontrol</h2>
             <ul className="controls">
@@ -78,6 +79,12 @@ export default function TutorialScreen({ totalAp = 9, onBack, onPlay }) {
                   <kbd>Esc</kbd>
                 </span>
                 <span>Keluar ke Home</span>
+              </li>
+              <li className="controls__touch">
+                <span className="keys">
+                  <kbd>HP/tablet</kbd>
+                </span>
+                <span>Tombol arah di kiri bawah, tombol Aksi di kanan bawah</span>
               </li>
             </ul>
           </div>

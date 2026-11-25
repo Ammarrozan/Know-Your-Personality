@@ -1,6 +1,7 @@
-// StartScreen.jsx - Home Screen bergaya game: Main, Cara Bermain, Pengaturan, Tentang. Domain Dev 2.
+// StartScreen.jsx - Home Screen bergaya game: Main, Cara Bermain, Panduan Guru, Pengaturan, Tentang. Domain Dev 2.
+import { DEVELOPERS, INSTITUTION } from '../data/learning.js';
 
-export default function StartScreen({ onPlay, onTutorial, onSettings, onAbout }) {
+export default function StartScreen({ onPlay, onTutorial, onGuide, onSettings, onAbout }) {
   return (
     <main className="app menu-screen">
       <section className="home">
@@ -26,6 +27,9 @@ export default function StartScreen({ onPlay, onTutorial, onSettings, onAbout })
           <button type="button" className="menu__item" onClick={onTutorial}>
             Cara Bermain
           </button>
+          <button type="button" className="menu__item" onClick={onGuide}>
+            Panduan Guru
+          </button>
           <button type="button" className="menu__item" onClick={onSettings}>
             Pengaturan
           </button>
@@ -37,6 +41,12 @@ export default function StartScreen({ onPlay, onTutorial, onSettings, onAbout })
         <p className="home__note">
           Refleksi diri yang ringan, bukan tes psikologi dan tidak untuk diagnosis.
         </p>
+
+        <footer className="home__credit">
+          Dikembangkan oleh {DEVELOPERS.join(' & ')}
+          <br />
+          {INSTITUTION}
+        </footer>
       </section>
     </main>
   );

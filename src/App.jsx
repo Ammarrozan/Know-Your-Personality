@@ -5,6 +5,8 @@ import { TI_IDS } from './game/mapData.js';
 import HUD from './components/HUD.jsx';
 import StartScreen from './components/StartScreen.jsx';
 import TutorialScreen from './components/TutorialScreen.jsx';
+import GuideScreen from './components/GuideScreen.jsx';
+import TouchControls from './components/TouchControls.jsx';
 import SettingsScreen from './components/SettingsScreen.jsx';
 import AboutScreen from './components/AboutScreen.jsx';
 import DialogueBox from './components/DialogueBox.jsx';
@@ -31,7 +33,7 @@ if (import.meta.env?.DEV) {
 }
 
 export default function App() {
-  // home | tutorial | settings | about | playing | result
+  // home | tutorial | guide | settings | about | playing | result
   const [screen, setScreen] = useState('home');
   const [ap, setAp] = useState(TOTAL_AP);
   const [score, setScore] = useState({ I: 0, E: 0, A: 0 });
@@ -117,12 +119,15 @@ export default function App() {
       <StartScreen
         onPlay={startGame}
         onTutorial={() => setScreen('tutorial')}
+        onGuide={() => setScreen('guide')}
         onSettings={() => setScreen('settings')}
         onAbout={() => setScreen('about')}
       />
     );
   } else if (screen === 'tutorial') {
     content = <TutorialScreen totalAp={TOTAL_AP} onBack={() => setScreen('home')} onPlay={startGame} />;
+  } else if (screen === 'guide') {
+    content = <GuideScreen totalAp={TOTAL_AP} onBack={() => setScreen('home')} />;
   } else if (screen === 'settings') {
     content = <SettingsScreen onBack={() => setScreen('home')} />;
   } else if (screen === 'about') {
@@ -151,6 +156,7 @@ export default function App() {
           )}
           {confirmExit && <ExitConfirm onCancel={() => setConfirmExit(false)} onConfirm={goHome} />}
         </div>
+        <TouchControls hidden={paused || confirmExit} />
       </div>
     );
   }
