@@ -1,23 +1,22 @@
 // AudioManager.js - musik latar (BGM) dan efek suara (SFX). Domain Dev 2.
-// Semua suara dibuat dengan Web Audio API (tanpa file audio pihak ketiga), jadi tidak ada
-// masalah lisensi. Peramban memblokir suara sebelum ada interaksi pengguna, sehingga
+// BGM diputar dari file (BGM_FILE). Efek suara dibuat dengan Web Audio API, kecuali yang
+// didaftarkan di SFX_FILES. Peramban memblokir suara sebelum ada interaksi pengguna, sehingga
 // `unlock()` dipanggil dari klik pertama pemain (lihat App.jsx).
 //
-// Ingin memakai file musik sendiri? Taruh file di public/assets/audio/, ubah BGM_FILE menjadi
-// "/assets/audio/nama-file.mp3", lalu perbarui AUDIO_CREDIT dengan sumber dan lisensinya
-// (hanya pakai lisensi yang mengizinkan, misalnya CC0, dan verifikasi sendiri).
+// Mengganti file audio: taruh file di public/assets/audio/, ubah BGM_FILE atau SFX_FILES,
+// lalu perbarui AUDIO_CREDIT (judul, pembuat, sumber, lisensi). Pakai hanya file yang
+// lisensinya jelas mengizinkan, misalnya CC0 atau CC BY, dan cantumkan kreditnya.
 
-export const BGM_FILE = '/assets/audio/bgm.mp3';
-export const AUDIO_CREDIT =
-  'Musik latar dan efek suara dibuat dengan kode menggunakan Web Audio API, tanpa file audio pihak ketiga.';
+export const BGM_FILE = '/assets/audio/bgm.ogg';
+export const AUDIO_CREDIT = [
+  'Musik latar: "Relaxing Interlude" oleh 3xBlast (opengameart.org/content/relaxing-interlude), lisensi CC BY-SA 3.0 (creativecommons.org/licenses/by-sa/3.0).',
+  'Efek suara dibuat dengan kode menggunakan Web Audio API.',
+];
 
 // Efek suara dari FILE (opsional). Kunci = nama efek, nilai = alamat file di folder public/.
-// Contoh: file public/assets/audio/door.mp3 dipanggil lewat "/assets/audio/door.mp3".
-// Bila file tidak ada atau gagal dimuat, otomatis dipakai suara sintesis bawaan (tanpa error).
-// Jika memakai file dari pihak lain, perbarui AUDIO_CREDIT di atas dengan sumber dan lisensinya.
-export const SFX_FILES = {
-  door: '/assets/audio/door.mp3',
-};
+// Contoh: { door: '/assets/audio/door.ogg' }. Bila file tidak ada atau gagal dimuat, otomatis
+// dipakai suara sintesis bawaan. Saat ini kosong: semua efek memakai suara sintesis.
+export const SFX_FILES = {};
 
 const BPM = 84;
 const BEAT = 60 / BPM;
@@ -144,10 +143,16 @@ class AudioManager {
     src.start(this.ctx.currentTime + 0.01);
   }
 
+  // Tab disembunyikan: hentikan efek suara (Web Audio) dan musik file (elemen <audio>).
+  // Tab terlihat lagi: lanjutkan, tetapi musik hanya diputar ulang bila memang sedang diminta.
   onVisibility() {
-    if (!this.ctx) return;
-    if (document.hidden) this.ctx.suspend().catch(() => {});
-    else this.ctx.resume().catch(() => {});
+    if (document.hidden) {
+      if (this.ctx) this.ctx.suspend().catch(() => {});
+      if (this.bgmFile) this.bgmFile.pause();
+    } else {
+      if (this.ctx) this.ctx.resume().catch(() => {});
+      if (this.bgmFile && this.bgmWanted) this.bgmFile.play().catch(() => {});
+    }
   }
 
   // ---------- musik latar ----------

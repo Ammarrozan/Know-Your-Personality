@@ -73,6 +73,12 @@ export default function TutorialScreen({ totalAp = 9, onBack, onPlay }) {
                 </span>
                 <span>Memilih jawaban</span>
               </li>
+              <li>
+                <span className="keys">
+                  <kbd>Esc</kbd>
+                </span>
+                <span>Keluar ke Home</span>
+              </li>
             </ul>
           </div>
         </div>

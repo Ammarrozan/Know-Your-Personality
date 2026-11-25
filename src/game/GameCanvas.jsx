@@ -14,19 +14,23 @@
 // di StrictMode (mount -> unmount -> mount) engine pertama dihancurkan
 // sebelum asetnya selesai dimuat, jadi callback tidak terpanggil ganda.
 // =====================================================================
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import GameEngine from "./GameEngine.js";
 
 export default function GameCanvas({ onTrigger, paused = false, activeZoneIds = [], onSound, onSceneChange, debug }) {
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
-  const callbacksRef = useRef({});
-  callbacksRef.current = { onTrigger, onSound, onSceneChange };
-
+  const callbacksRef = useRef({ onTrigger, onSound, onSceneChange });
   const pausedRef = useRef(paused);
-  pausedRef.current = paused;
   const zonesRef = useRef(activeZoneIds);
-  zonesRef.current = activeZoneIds;
+
+  // Ref disinkronkan setelah render (bukan saat render) agar lolos aturan react-hooks/refs.
+  // useLayoutEffect berjalan sebelum useEffect, jadi engine selalu membaca nilai terbaru.
+  useLayoutEffect(() => {
+    callbacksRef.current = { onTrigger, onSound, onSceneChange };
+    pausedRef.current = paused;
+    zonesRef.current = activeZoneIds;
+  });
 
   useEffect(() => {
     const showDebug =

@@ -18,7 +18,7 @@ export const scenarios = [
     options: [
       { text: "Aku menyapanya dan mengajaknya mengobrol selama kami mengantre.", type: "E" },
       { text: "Aku membalas senyumnya, lalu menunggu giliran sambil memandang menu.", type: "I" },
-      { text: "Aku mengobrol sebentar kalau dia membuka percakapan lebih dulu.", type: "A" },
+      { text: "Aku menyapanya dan mengobrol ringan sebentar, lalu kembali memilih menu.", type: "A" },
     ],
   },
   {
@@ -28,7 +28,7 @@ export const scenarios = [
       "Jam istirahat siang, kantin penuh oleh obrolan dan bunyi sendok beradu dengan piring. Kamu membawa nampan berisi nasi dan es teh sambil mencari tempat duduk. Di meja panjang, teman-teman sekelas sedang tertawa sambil berbagi gorengan. Di dekat jendela, ada satu bangku kosong yang diterangi sinar matahari.",
     options: [
       { text: "Aku duduk di bangku dekat jendela dan makan dengan tenang.", type: "I" },
-      { text: "Aku memilih sesuai suasana hatiku, meja panjang atau dekat jendela.", type: "A" },
+      { text: "Aku duduk di ujung meja panjang, menyimak obrolan sambil makan santai.", type: "A" },
       { text: "Aku bergabung di meja panjang dan ikut bercerita ramai.", type: "E" },
     ],
   },
@@ -38,7 +38,7 @@ export const scenarios = [
     narrative:
       "Kamu sampai di stan minuman saat ibu penjual sedang menyiapkan pesanan. Dia mengenal hampir semua siswa dan sering bercerita tentang hal-hal kecil di sekolah. Hari ini dia menyapamu dan bertanya bagaimana harimu. Antrean di belakangmu hanya tinggal dua orang.",
     options: [
-      { text: "Aku menyesuaikan lamanya obrolan dengan suasana di stan itu.", type: "A" },
+      { text: "Aku bercerita sedikit tentang hariku, lalu pamit karena antrean menunggu.", type: "A" },
       { text: "Aku menjawab singkat, tersenyum, lalu membawa pesananku ke meja.", type: "I" },
       { text: "Aku bercerita panjang tentang hariku dan balik bertanya kabarnya.", type: "E" },
     ],
@@ -51,7 +51,7 @@ export const scenarios = [
     options: [
       { text: "Aku membalas senyumnya lalu kembali fokus mencari bukuku.", type: "I" },
       { text: "Aku mengajaknya berdiskusi tentang topik yang kami cari.", type: "E" },
-      { text: "Aku menyapa dulu, lalu mengobrol bila dia melanjutkan percakapan.", type: "A" },
+      { text: "Aku menyapanya dan bertukar judul buku, lalu lanjut mencari sendiri.", type: "A" },
     ],
   },
   {
@@ -73,7 +73,7 @@ export const scenarios = [
     options: [
       { text: "Aku bercerita tentang tugasku dan bertanya rekomendasi buku lainnya.", type: "E" },
       { text: "Aku menjawab singkat, mencatat rekomendasinya, lalu meminjam bukuku.", type: "I" },
-      { text: "Aku mengobrol sebentar, lalu menyesuaikan dengan kesibukan petugas.", type: "A" },
+      { text: "Aku menyebut tugasku singkat, lalu menanyakan satu buku rekomendasinya.", type: "A" },
     ],
   },
   {
@@ -83,7 +83,7 @@ export const scenarios = [
       "Pagi ini guru mengumumkan bahwa kalian boleh memilih tempat duduk sendiri untuk sebulan ke depan. Ruang kelas masih setengah kosong, dengan sinar matahari masuk dari jendela dan bau spidol papan tulis. Bangku depan dan bangku belakang sama-sama masih tersedia. Beberapa teman sudah duduk berkelompok di tengah ruangan.",
     options: [
       { text: "Aku memilih bangku sudut dekat jendela yang jauh dari keramaian.", type: "I" },
-      { text: "Aku memilih tempat yang pas dengan suasana hatiku hari itu.", type: "A" },
+      { text: "Aku memilih bangku dekat jendela yang tidak jauh dari teman-teman.", type: "A" },
       { text: "Aku duduk di tengah dekat teman-teman supaya mudah mengobrol.", type: "E" },
     ],
   },
@@ -93,7 +93,7 @@ export const scenarios = [
     narrative:
       "Guru menulis satu soal di papan tulis dan bertanya siapa yang mau menjelaskan jawabannya di depan. Kelas hening sejenak, hanya terdengar kipas angin dan pensil yang diketuk pelan. Kamu sudah punya gambaran jawabannya, dan guru menoleh ke arah barisanmu.",
     options: [
-      { text: "Aku maju bila yakin jawabanku, atau menunggu teman lain mencoba dulu.", type: "A" },
+      { text: "Aku berdiskusi singkat dengan teman sebangku, lalu maju menjelaskan jawabannya.", type: "A" },
       { text: "Aku mengangkat tangan dan maju sambil mengajak teman ikut berdiskusi.", type: "E" },
       { text: "Aku menyusun jawaban di buku dulu, lalu maju menjelaskan runtut.", type: "I" },
     ],
@@ -126,7 +126,7 @@ export const scenarios = [
     narrative:
       "Guru meminta kalian berpasangan untuk praktik memasang komponen pada satu unit komputer. Meja praktik penuh kabel dan obeng kecil yang tertata rapi. Teman satu pasanganmu adalah seseorang yang belum begitu kamu kenal. Di sekeliling kalian, pasangan lain sudah mulai bekerja sambil berbincang.",
     options: [
-      { text: "Aku mengikuti irama pasanganku: banyak bicara atau fokus bekerja.", type: "A" },
+      { text: "Aku berkenalan dan mengobrol sebentar, lalu kami fokus bekerja.", type: "A" },
       { text: "Aku mengerjakan bagianku dengan fokus dan berbicara seperlunya saja.", type: "I" },
       { text: "Aku membuka obrolan dulu, lalu kami membagi pekerjaan sambil bercanda.", type: "E" },
     ],
@@ -138,7 +138,7 @@ export const scenarios = [
       "Di dinding lab tertempel papan berisi daftar peran untuk proyek tim: pemimpin tim, penyaji presentasi, penulis kode, dan penguji. Guru meminta setiap tim menentukan pembagian peran sebelum bel berbunyi. Anggota timmu mulai melirik daftar itu satu per satu.",
     options: [
       { text: "Aku mengambil peran penulis kode dan bekerja di balik layar.", type: "I" },
-      { text: "Aku mengambil peran yang masih kosong setelah teman lain memilih.", type: "A" },
+      { text: "Aku mengambil peran penguji: mengecek program sendiri, lalu melapor ke tim.", type: "A" },
       { text: "Aku mengambil peran penyaji presentasi dan berbicara di depan kelas.", type: "E" },
     ],
   },
@@ -159,7 +159,7 @@ export const scenarios = [
     narrative:
       "Istirahat kedua masih tersisa tiga puluh menit. Taman sekolah terasa teduh, dengan angin pelan dan kicau burung di antara pepohonan. Beberapa kelompok kecil duduk di rumput, dan sebagian bangku masih kosong.",
     options: [
-      { text: "Aku santai saja: mengobrol kalau ada kenalan, menyendiri kalau tidak.", type: "A" },
+      { text: "Aku duduk di rumput dekat satu kelompok kecil dan sesekali ikut mengobrol.", type: "A" },
       { text: "Aku mencari bangku teduh dan menikmati waktu sendirian.", type: "I" },
       { text: "Aku menghampiri kelompok yang sedang tertawa dan ikut mengobrol.", type: "E" },
     ],
@@ -171,7 +171,7 @@ export const scenarios = [
       "Bel pulang sudah berbunyi dan siswa mengalir keluar melewati gerbang. Temanmu yang biasa pulang bersamamu mengabari bahwa dia masih piket kelas dan baru selesai sekitar dua puluh menit lagi. Langit mulai jingga dan angin sore terasa sejuk. Beberapa siswa lain juga menunggu jemputan di dekat gerbang.",
     options: [
       { text: "Aku mengobrol dengan siswa lain yang juga sedang menunggu.", type: "E" },
-      { text: "Aku mulai dengan musik, lalu mengobrol bila ada yang menyapaku.", type: "A" },
+      { text: "Aku mendengarkan musik sebentar, lalu mengobrol dengan siswa di sebelahku.", type: "A" },
       { text: "Aku menunggu sendiri sambil mendengarkan musik atau membaca.", type: "I" },
     ],
   },
@@ -183,7 +183,7 @@ export const scenarios = [
     options: [
       { text: "Aku pamit pulang dan memakai sore itu untuk beristirahat.", type: "I" },
       { text: "Aku ikut nongkrong dan menutup hari bersama teman-teman.", type: "E" },
-      { text: "Aku ikut kalau tenagaku masih cukup, kalau tidak aku pulang.", type: "A" },
+      { text: "Aku ikut ke warung sebentar, lalu pulang lebih dulu untuk beristirahat.", type: "A" },
     ],
   },
   {
@@ -203,7 +203,7 @@ export const scenarios = [
     narrative:
       "Di tengah halaman sekolah, seorang teman sekelas menghampirimu dengan langkah cepat. Dia bercerita bahwa besok dia harus tampil di depan seluruh sekolah dan terus memikirkannya sejak pagi. Jam istirahat masih tersisa lima belas menit. Dia tampak ingin ditemani, tetapi belum meminta apa pun.",
     options: [
-      { text: "Aku menanyakan apa yang dia butuhkan, lalu membantu sesuai itu.", type: "A" },
+      { text: "Aku menemaninya berlatih sekali, lalu memberinya waktu untuk menenangkan diri.", type: "A" },
       { text: "Aku menemaninya berlatih dan menyemangatinya sambil bercerita panjang.", type: "E" },
       { text: "Aku mendengarkan dengan seksama lalu memberi satu saran singkat.", type: "I" },
     ],
@@ -226,7 +226,7 @@ export const scenarios = [
       "Seorang guru menghentikan langkahmu di lorong dan meminta kamu mewakili kelas dalam lomba cerdas cermat antar sekolah bulan depan. Ada latihan bersama setiap sore, dan kamu akan bertemu banyak siswa dari kelas lain. Guru itu menegaskan bahwa keputusan sepenuhnya ada di tanganmu.",
     options: [
       { text: "Aku meminta waktu untuk berpikir dan menjawab setelah menyusun pertimbangan.", type: "I" },
-      { text: "Aku menerima bila jadwalnya cocok dan ada teman yang kukenal.", type: "A" },
+      { text: "Aku menerima dan mengajak satu teman yang kukenal ikut berlatih.", type: "A" },
       { text: "Aku menerima dengan antusias karena ingin bertemu banyak orang baru.", type: "E" },
     ],
   },

@@ -1,5 +1,5 @@
 // App.jsx - root component & state manager, penghubung React-Canvas. Domain Dev 2.
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import GameCanvas from './game/GameCanvas.jsx';
 import { TI_IDS } from './game/mapData.js';
 import HUD from './components/HUD.jsx';
@@ -8,6 +8,7 @@ import TutorialScreen from './components/TutorialScreen.jsx';
 import SettingsScreen from './components/SettingsScreen.jsx';
 import AboutScreen from './components/AboutScreen.jsx';
 import DialogueBox from './components/DialogueBox.jsx';
+import ExitConfirm from './components/ExitConfirm.jsx';
 import SoundIcon from './components/SoundIcon.jsx';
 import ResultScreen from './components/ResultScreen.jsx';
 import useAudioState from './audio/useAudioState.js';
@@ -37,6 +38,7 @@ export default function App() {
   const [completedScenarios, setCompletedScenarios] = useState([]);
   const [activeScenarioId, setActiveScenarioId] = useState(null);
   const [paused, setPaused] = useState(false);
+  const [confirmExit, setConfirmExit] = useState(false);
   const { muted } = useAudioState();
 
   // Zona aktif = semua TI yang punya skenario dikurangi yang sudah dijawab (SRS 3.3)
@@ -51,6 +53,7 @@ export default function App() {
     setCompletedScenarios([]);
     setActiveScenarioId(null);
     setPaused(false);
+    setConfirmExit(false);
   };
 
   const startGame = () => {
@@ -62,6 +65,18 @@ export default function App() {
     resetGame();
     setScreen('home');
   };
+
+  // Esc saat bermain: buka konfirmasi keluar (bila tidak ada dialog skenario), atau tutup konfirmasinya.
+  useEffect(() => {
+    if (screen !== 'playing') return undefined;
+    const onKey = (e) => {
+      if (e.key !== 'Escape' || e.repeat) return;
+      if (confirmExit) setConfirmExit(false);
+      else if (!activeScenarioId) setConfirmExit(true);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [screen, confirmExit, activeScenarioId]);
 
   // Klik pertama pemain membuka audio (kebijakan peramban) dan memulai musik latar.
   // Semua tombol berbunyi "klik", kecuali yang ditandai data-sfx="off".
@@ -75,7 +90,7 @@ export default function App() {
   // Dipanggil Canvas sekali saat Spasi ditekan di zona aktif.
   // Wajib set paused = true di handler yang sama (kontrak SRS 3.3).
   const handleTrigger = (id) => {
-    if (paused || completedScenarios.includes(id) || !SCENARIO_IDS.has(id)) return; // pengaman
+    if (paused || confirmExit || completedScenarios.includes(id) || !SCENARIO_IDS.has(id)) return; // pengaman
     setActiveScenarioId(id);
     setPaused(true);
   };
@@ -119,15 +134,22 @@ export default function App() {
       <div className="app game-screen">
         <div className="stage">
           <GameCanvas
-            paused={paused}
+            paused={paused || confirmExit}
             activeZoneIds={activeZoneIds}
             onTrigger={handleTrigger}
             onSound={(name) => audio.playSfx(name)}
           />
-          <HUD ap={ap} total={TOTAL_AP} muted={muted} onToggleMute={() => audio.toggleMuted()} />
+          <HUD
+            ap={ap}
+            total={TOTAL_AP}
+            muted={muted}
+            onToggleMute={() => audio.toggleMuted()}
+            onExit={() => setConfirmExit(true)}
+          />
           {activeScenarioId && (
             <DialogueBox key={activeScenarioId} scenarioId={activeScenarioId} onSelect={handleOptionSelect} />
           )}
+          {confirmExit && <ExitConfirm onCancel={() => setConfirmExit(false)} onConfirm={goHome} />}
         </div>
       </div>
     );

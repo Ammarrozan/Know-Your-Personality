@@ -636,33 +636,47 @@ kbd {
   box-shadow: 0 0 0.6em rgba(255, 215, 64, 0.75);
 }
 
-/* ---------- Tombol suara di area game ---------- */
+/* ---------- Tombol di area game (suara + keluar), pojok kiri atas ---------- */
 
-.sound-toggle {
+.hud-tools {
   position: absolute;
   top: 2.2cqw;
   left: 2.2cqw;
-  display: grid;
-  place-items: center;
-  width: 2.5em;
+  display: flex;
+  gap: 0.5em;
+  font-size: clamp(11px, 1.9cqw, 20px);
+}
+
+.hud-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
   height: 2.5em;
-  padding: 0;
+  padding: 0 1em 0 0.8em;
   border: 1px solid rgba(255, 215, 64, 0.45);
-  border-radius: 50%;
+  border-radius: 999px;
   background: rgba(13, 19, 46, 0.86);
   box-shadow: 0 0.3em 0.9em rgba(0, 0, 0, 0.4);
   color: var(--text);
-  font-size: clamp(11px, 1.9cqw, 20px);
+  font: inherit;
+  font-weight: 800;
   line-height: 1;
   cursor: pointer;
 }
 
-.sound-toggle svg {
-  width: 1.3em;
-  height: 1.3em;
+.hud-btn--icon {
+  width: 2.5em;
+  padding: 0;
 }
 
-.sound-toggle:hover {
+.hud-btn svg {
+  width: 1.3em;
+  height: 1.3em;
+  flex: none;
+}
+
+.hud-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -800,6 +814,23 @@ kbd {
   border-top: 1px solid rgba(255, 255, 255, 0.14);
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+/* ---------- Konfirmasi keluar ---------- */
+
+.confirm {
+  width: min(100%, 26em);
+  animation: dialogue-in 0.22s ease-out;
+}
+
+.confirm__title {
+  margin-bottom: 0.35em;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1.7em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
 }
 
 /* ---------- DialogueBox ---------- */

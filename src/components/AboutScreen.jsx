@@ -23,7 +23,9 @@ export default function AboutScreen({ onBack }) {
 
         <h2 className="page__heading">Kredit</h2>
         <ul className="credits">
-          <li>{AUDIO_CREDIT}</li>
+          {AUDIO_CREDIT.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
           <li>
             Font judul Lilita One (Juan Montoreano) dan font teks Nunito (The Nunito Project
             Authors), berlisensi SIL Open Font License 1.1.

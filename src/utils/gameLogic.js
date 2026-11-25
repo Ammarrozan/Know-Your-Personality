@@ -1,4 +1,4 @@
-// gameLogic.js - fungsi murni: pemilihan skenario, pengacakan, dan penentuan hasil. Domain Dev 2.
+// gameLogic.js - fungsi murni: pengacakan urutan opsi dan penentuan hasil. Domain Dev 2.
 // `rng` bisa diganti (default Math.random) agar mudah diuji.
 
 // Fisher-Yates. Mengembalikan array baru, array asli tidak diubah.
@@ -9,11 +9,6 @@ export function shuffle(array, rng = Math.random) {
     [result[i], result[j]] = [result[j], result[i]];
   }
   return result;
-}
-
-// Memilih `count` skenario berbeda secara acak dari `all` (REQ-F11).
-export function pickScenarios(all, count = 9, rng = Math.random) {
-  return shuffle(all, rng).slice(0, count);
 }
 
 // Aturan hasil SRS REQ-F09: Introvert jika I > E dan I > A; Ekstrovert jika E > I dan E > A;
