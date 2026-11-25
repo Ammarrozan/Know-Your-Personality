@@ -1,0 +1,1205 @@
+/* index.css - variabel warna & styling global (CSS murni). Domain Dev 2. */
+
+/* Font dimuat lokal dari public/assets/fonts (lisensi SIL OFL 1.1; lihat berkas OFL-*.txt) */
+@font-face {
+  font-family: "Lilita One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/lilita-one-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("/assets/fonts/nunito-latin-wght-normal.woff2") format("woff2");
+}
+
+:root {
+  /* Tema: navy senja + aksen kuning-oranye (senada penanda zona di peta) */
+  --bg: #0b1020;
+  --surface: #151d3b;
+  --surface-2: #1d2850;
+  --border: #33427f;
+  --text: #f3f5ff;
+  --text-muted: #c3cbea;
+  --accent: #ffd740;
+  --accent-strong: #ffc107;
+  --accent-2: #ff9a2e;
+  --bar: #6b7fd6;
+  --on-accent: #2b2000;
+  --ink: #1a1030;
+  --overlay: rgba(6, 9, 20, 0.6);
+  --glass: rgba(13, 19, 46, 0.8);
+  --glass-border: rgba(255, 215, 64, 0.3);
+
+  --radius: 18px;
+  --font-display: "Lilita One", "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --font: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  /* Seluruh UI menu memakai rem, jadi ikut mengecil/membesar mengikuti tinggi dan lebar jendela
+     sehingga layar menu muat tanpa scroll. */
+  font-size: clamp(11px, min(2vh, 1.25vw), 19px);
+}
+
+body {
+  margin: 0;
+  /* Padding vertikal total 16px = rumus lebar kanvas Dev 1: (100vh - 16px) x 1.5.
+     Jangan ubah, atau muncul scrollbar. */
+  padding: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Tata letak halaman ---------- */
+
+.app {
+  min-height: calc(100vh - 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Area game: lebar & rasio 3:2 sama dengan GameCanvas (Dev 1).
+   HUD dan dialog diletakkan absolute di dalam .stage. */
+.stage {
+  position: relative;
+  width: min(100%, calc((100vh - 16px) * 1.5));
+  container-type: inline-size; /* satuan cqw: teks overlay ikut mengecil bersama kanvas */
+  border-radius: 8px;
+  /* Bingkai memakai box-shadow supaya tidak mengubah ukuran (jangan diganti dengan border) */
+  box-shadow:
+    0 0 0 3px rgba(255, 215, 64, 0.55),
+    0 0 0 6px rgba(11, 16, 32, 0.92),
+    0 1.2rem 3rem rgba(0, 0, 0, 0.6);
+}
+
+/* Latar layar game: ilustrasi Home yang diburamkan dan digelapkan, mengisi sisi kiri-kanan area game */
+.game-screen {
+  position: relative;
+}
+
+.game-screen::before {
+  content: "";
+  position: fixed;
+  inset: -20px;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(7, 10, 24, 0.7), rgba(7, 10, 24, 0.82)),
+    url("/assets/bg_home.jpg") center / cover no-repeat,
+    var(--bg);
+  filter: blur(9px);
+}
+
+/* Pembungkus App: tidak memengaruhi tata letak (dipakai untuk menangkap klik) */
+.root {
+  display: contents;
+}
+
+/* Kanvas milik Dev 1 (960x640, rasio 3:2) mengisi lebar .stage */
+.game-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  background: #1b2a1f;
+  border-radius: 8px;
+  image-rendering: pixelated;
+}
+
+/* ---------- Komponen umum ---------- */
+
+.panel {
+  width: min(100%, 36rem);
+  padding: 1.5em 1.9em;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  backdrop-filter: blur(10px) saturate(1.15);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow:
+    0 1.2rem 3rem rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  margin-top: 1.2em;
+}
+
+.panel__actions--end {
+  justify-content: flex-end;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.btn {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.55em 1.7em 0.6em;
+  font-family: var(--font-display);
+  font-size: 1.25em;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  background: linear-gradient(180deg, #ffe066, #ffb300);
+  color: #3a2500;
+  box-shadow:
+    0 0.18em 0 #b36b00,
+    0 0.45em 0.9em rgba(0, 0, 0, 0.35),
+    inset 0 0.1em 0 rgba(255, 255, 255, 0.45);
+  transition:
+    transform 0.08s ease,
+    filter 0.12s ease,
+    box-shadow 0.08s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.07);
+  transform: translateY(-0.05em);
+}
+
+.btn:active {
+  transform: translateY(0.14em);
+  box-shadow:
+    0 0.04em 0 #b36b00,
+    0 0.2em 0.5em rgba(0, 0, 0, 0.35),
+    inset 0 0.1em 0 rgba(255, 255, 255, 0.45);
+}
+
+.btn--ghost {
+  background: linear-gradient(180deg, #3b4fa8, #27357c);
+  color: var(--text);
+  box-shadow:
+    0 0.18em 0 #151d4a,
+    0 0.45em 0.9em rgba(0, 0, 0, 0.35),
+    inset 0 0.1em 0 rgba(255, 255, 255, 0.22);
+}
+
+.btn--ghost:active {
+  box-shadow:
+    0 0.04em 0 #151d4a,
+    0 0.2em 0.5em rgba(0, 0, 0, 0.35),
+    inset 0 0.1em 0 rgba(255, 255, 255, 0.22);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.9em;
+  padding: 0.1em 0.5em 0.18em;
+  border: 1px solid var(--border);
+  border-bottom-width: 3px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9em;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* ---------- Layar menu (Home, Tutorial, Pengaturan, Tentang, Hasil) ---------- */
+
+/* Tinggi mengikuti jendela; konten dipusatkan dengan margin:auto agar bagian atas tidak
+   terpotong bila konten lebih tinggi dari jendela (scroll hanya sebagai cadangan). */
+.menu-screen {
+  position: relative;
+  height: calc(100vh - 16px);
+  padding: 0.5rem 0;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+.menu-screen > * {
+  margin: auto;
+}
+
+/* Latar bergaya game; dipasang fixed supaya mengisi seluruh jendela */
+.menu-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at center, rgba(11, 16, 32, 0.62) 0%, rgba(11, 16, 32, 0.18) 72%),
+    url("/assets/bg_home.jpg") center / cover no-repeat,
+    var(--bg);
+}
+
+.home {
+  width: min(100%, 44rem);
+  text-align: center;
+}
+
+.home__eyebrow {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 0.1em 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Judul bergaya poster game: huruf tebal, isi gradien emas, kontur gelap, dan bayangan 3D.
+   Kontur dibuat dari lapisan ::before (isi teks yang sama) di belakang teks bergradien. */
+.home__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  isolation: isolate;
+  margin: 0.15em 0 0.1em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.015em;
+  transform: rotate(-2.5deg);
+}
+
+.title__small,
+.title__big {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(180deg, #ffffff 0%, #e8eeff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.title__small {
+  font-size: 3.4rem;
+}
+
+.title__big {
+  font-size: 6.8rem;
+  background-image: linear-gradient(180deg, #fff6b0 0%, #ffd740 40%, #ff9a2e 100%);
+}
+
+.title__small::before,
+.title__big::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  -webkit-text-fill-color: var(--ink);
+  -webkit-text-stroke: 0.2em var(--ink);
+  paint-order: stroke fill;
+  text-shadow:
+    0 0.07em 0 #3a1d5c,
+    0 0.14em 0 #2a1445,
+    0 0.26em 0.28em rgba(0, 0, 0, 0.55);
+}
+
+.home__tagline {
+  margin-top: 0.7em;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-shadow: 0 0.08em 0.3em rgba(0, 0, 0, 0.75);
+}
+
+.menu {
+  display: grid;
+  gap: 0.8rem;
+  width: min(100%, 21rem);
+  margin: 1.5rem auto 0;
+}
+
+.menu__item {
+  appearance: none;
+  position: relative;
+  padding: 0.58em 1.2em 0.66em;
+  border: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #3f54b3, #27357c);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  cursor: pointer;
+  box-shadow:
+    0 0.26em 0 #151d4a,
+    0 0.6em 1.1em rgba(0, 0, 0, 0.4),
+    inset 0 0.12em 0 rgba(255, 255, 255, 0.24);
+  transition:
+    transform 0.08s ease,
+    filter 0.12s ease,
+    box-shadow 0.08s ease;
+}
+
+.menu__item:hover {
+  filter: brightness(1.14);
+  transform: translateY(-0.07em);
+}
+
+.menu__item:active {
+  transform: translateY(0.18em);
+  box-shadow:
+    0 0.06em 0 #151d4a,
+    0 0.25em 0.6em rgba(0, 0, 0, 0.4),
+    inset 0 0.12em 0 rgba(255, 255, 255, 0.24);
+}
+
+.menu__item--primary {
+  background: linear-gradient(180deg, #ffe066, #ffb300);
+  color: #3a2500;
+  font-size: 1.9rem;
+  box-shadow:
+    0 0.26em 0 #b36b00,
+    0 0.6em 1.1em rgba(0, 0, 0, 0.4),
+    inset 0 0.12em 0 rgba(255, 255, 255, 0.5);
+}
+
+.menu__item--primary:active {
+  box-shadow:
+    0 0.06em 0 #b36b00,
+    0 0.25em 0.6em rgba(0, 0, 0, 0.4),
+    inset 0 0.12em 0 rgba(255, 255, 255, 0.5);
+}
+
+.home__note {
+  display: inline-block;
+  margin-top: 1.4rem;
+  padding: 0.4em 1.1em;
+  border-radius: 999px;
+  background: rgba(11, 16, 32, 0.62);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Tombol suara di pojok layar menu */
+.menu-sound {
+  position: fixed;
+  top: 1.1rem;
+  right: 1.1rem;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--text);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.menu-sound:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------- Halaman (Tutorial, Pengaturan, Tentang) ---------- */
+
+.page {
+  width: min(100%, 44rem);
+  font-size: 1rem;
+}
+
+.page--narrow {
+  width: min(100%, 38rem);
+}
+
+.page--wide {
+  width: min(100%, 66rem);
+}
+
+.page__title {
+  margin-bottom: 0.45em;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-shadow: 0 0.07em 0 rgba(0, 0, 0, 0.45);
+}
+
+.page__heading {
+  margin: 1.1em 0 0.4em;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+.page__heading:first-child {
+  margin-top: 0;
+}
+
+.page__note {
+  margin-top: 1.1em;
+  padding-top: 0.9em;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.tutorial {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 0 2.2rem;
+}
+
+/* Langkah bernomor dengan lencana kuning */
+.steps {
+  display: grid;
+  gap: 0.65em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  position: relative;
+  padding-left: 2.5em;
+  color: var(--text-muted);
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  top: 0.05em;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe066, #ffb300);
+  color: #3a2500;
+  font-family: var(--font-display);
+  font-size: 1.05em;
+  box-shadow: 0 0.12em 0 #b36b00;
+}
+
+.controls {
+  display: grid;
+  gap: 0.7em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.controls li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.25em 0.9em;
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.keys__or {
+  padding: 0 0.2em;
+  color: var(--text-muted);
+  font-size: 0.85em;
+}
+
+.credits {
+  display: grid;
+  gap: 0.5em;
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--text-muted);
+}
+
+/* Daftar berpoin biasa (tujuan pembelajaran, panduan guru) */
+.list {
+  display: grid;
+  gap: 0.35em;
+  margin: 0.3em 0 0;
+  padding-left: 1.2em;
+  color: var(--text-muted);
+}
+
+/* Identitas pengembang di Home */
+.home__credit {
+  margin-top: 0.8rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-shadow: 0 0.08em 0.3em rgba(0, 0, 0, 0.85);
+}
+
+/* Baris kontrol HP/tablet di Cara Bermain hanya tampil di perangkat sentuh */
+.controls__touch {
+  display: none !important;
+}
+
+/* ---------- Pengaturan ---------- */
+
+.setting {
+  margin-top: 1em;
+  padding: 0.8em 1em;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.setting__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.setting__label {
+  font-weight: 800;
+}
+
+.setting__value {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.setting__check {
+  width: 1.4em;
+  height: 1.4em;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.setting__range {
+  width: 100%;
+  margin-top: 0.5em;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ---------- HUD (di dalam .stage; ukuran mengikuti lebar kanvas lewat cqw) ---------- */
+
+.hud {
+  position: absolute;
+  top: 2.2cqw;
+  right: 2.2cqw;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.4em 1em;
+  background: rgba(13, 19, 46, 0.86);
+  border: 1px solid rgba(255, 215, 64, 0.45);
+  border-radius: 999px;
+  box-shadow: 0 0.3em 0.9em rgba(0, 0, 0, 0.4);
+  color: var(--text);
+  font-size: clamp(11px, 1.9cqw, 20px);
+  font-weight: 800;
+  pointer-events: none; /* tidak menghalangi klik di kanvas */
+}
+
+.hud__label {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.hud__value {
+  font-variant-numeric: tabular-nums;
+}
+
+.hud__dots {
+  display: flex;
+  gap: 0.3em;
+}
+
+.hud__dot {
+  width: 0.72em;
+  height: 0.72em;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.28);
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hud__dot--on {
+  background: radial-gradient(circle at 35% 30%, #fff6b0, #ffc107);
+  box-shadow: 0 0 0.6em rgba(255, 215, 64, 0.75);
+}
+
+/* ---------- Tombol di area game (suara + keluar), pojok kiri atas ---------- */
+
+.hud-tools {
+  position: absolute;
+  top: 2.2cqw;
+  left: 2.2cqw;
+  display: flex;
+  gap: 0.5em;
+  font-size: clamp(11px, 1.9cqw, 20px);
+}
+
+.hud-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  height: 2.5em;
+  padding: 0 1em 0 0.8em;
+  border: 1px solid rgba(255, 215, 64, 0.45);
+  border-radius: 999px;
+  background: rgba(13, 19, 46, 0.86);
+  box-shadow: 0 0.3em 0.9em rgba(0, 0, 0, 0.4);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.hud-btn--icon {
+  width: 2.5em;
+  padding: 0;
+}
+
+.hud-btn svg {
+  width: 1.3em;
+  height: 1.3em;
+  flex: none;
+}
+
+.hud-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------- Overlay di atas kanvas (dialog) ---------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 3cqw;
+  background: var(--overlay);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  border-radius: 8px; /* sama dengan sudut kanvas */
+  font-size: clamp(13px, 1.75cqw, 22px);
+  animation: overlay-in 0.18s ease-out;
+}
+
+/* Overlay selalu di atas teks petunjuk HP tegak (.stage::after) */
+.stage .overlay {
+  z-index: 2;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- ResultScreen ---------- */
+
+.page--result {
+  width: min(100%, 70rem);
+}
+
+.result__grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 0 2.4rem;
+  align-items: stretch;
+}
+
+.result__main {
+  align-self: center;
+}
+
+.result__type {
+  margin-top: 0.05em;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 4.6rem;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-shadow:
+    0 0.06em 0 #b36b00,
+    0 0.12em 0 var(--ink),
+    0 0.2em 0.3em rgba(0, 0, 0, 0.5);
+}
+
+.result__reason {
+  margin-top: 0.5em;
+  color: var(--text-muted);
+}
+
+.bars {
+  display: grid;
+  gap: 0.7em;
+  margin: 1.2em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 6.2em 1fr 1.6em;
+  align-items: center;
+  gap: 0.8em;
+}
+
+.bar__label {
+  font-weight: 800;
+}
+
+.bar__track {
+  display: block;
+  height: 1em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8da0ec, var(--bar));
+}
+
+.bar__fill--top {
+  background: linear-gradient(180deg, #ffe066, #ffb300);
+}
+
+.bar__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: right;
+}
+
+.result__side {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.card {
+  padding: 0.9em 1.1em 1em;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.result__heading {
+  margin-bottom: 0.3em;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+.result__note {
+  margin-top: 1rem;
+  padding-top: 0.8em;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Konfirmasi keluar ---------- */
+
+.confirm {
+  width: min(100%, 26em);
+  animation: dialogue-in 0.22s ease-out;
+}
+
+.confirm__title {
+  margin-bottom: 0.35em;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1.7em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+/* ---------- DialogueBox ---------- */
+
+.dialogue {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 40em);
+  max-height: 100%;
+  margin-top: 1.1em; /* ruang untuk pita lokasi yang menonjol di atas kartu */
+  padding: 1.6em 1.8em 1.5em;
+  animation: dialogue-in 0.22s ease-out;
+}
+
+@keyframes dialogue-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.8em) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dialogue:focus {
+  outline: none; /* fokus programatik saat dialog dibuka */
+}
+
+/* Badan dialog: satu-satunya bagian yang boleh di-scroll bila jendela sangat kecil */
+.dialogue__body {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Pita nama lokasi di tepi atas kartu */
+.dialogue__place {
+  position: absolute;
+  top: -0.95em;
+  left: 1.4em;
+  margin: 0;
+  padding: 0.15em 1.1em 0.25em;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffe066, #ffb300);
+  box-shadow:
+    0 0.14em 0 #b36b00,
+    0 0.4em 0.8em rgba(0, 0, 0, 0.4);
+  color: #3a2500;
+  font-family: var(--font-display);
+  font-size: 1.25em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+
+.dialogue__narrative {
+  font-size: 1.04em;
+  line-height: 1.6;
+}
+
+.dialogue__question {
+  margin-top: 0.9em;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 1.15em;
+  letter-spacing: 0.03em;
+}
+
+.choices {
+  display: grid;
+  gap: 0.55em;
+  margin-top: 0.55em;
+}
+
+/* Ketiga opsi harus tampil identik agar tidak ada yang tampak lebih diunggulkan */
+.choice {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  width: 100%;
+  padding: 0.6em 1em 0.6em 0.7em;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    background-color 0.12s ease,
+    transform 0.1s ease;
+}
+
+/* Efek sorot memakai garis dalam, bukan menggeser tombol: pergeseran ke kanan membuat tepi
+   tombol terpotong dan memunculkan scrollbar horizontal di dalam dialog. */
+.choice:hover {
+  border-color: var(--accent);
+  background: rgba(255, 215, 64, 0.12);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.choice:active {
+  transform: scale(0.99);
+}
+
+.choice:focus-visible {
+  outline-offset: -4px; /* garis fokus di dalam tombol agar tidak terpotong tepi dialog */
+}
+
+.choice__key {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe066, #ffb300);
+  color: #3a2500;
+  font-family: var(--font-display);
+  font-size: 1.05em;
+  box-shadow: 0 0.1em 0 #b36b00;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .home__title {
+    transform: none;
+  }
+}
+
+/* ---------- Kontrol sentuh (HP/tablet) ---------- */
+
+.touch {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .controls__touch {
+    display: grid !important;
+  }
+
+  .touch {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .touch--hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .touch__pad {
+    --touch: 52px;
+    display: grid;
+    grid-template-columns: repeat(3, var(--touch));
+    grid-template-rows: repeat(3, var(--touch));
+    gap: 4px;
+  }
+
+  .touch__btn,
+  .touch__action {
+    pointer-events: auto;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    border: 1px solid rgba(255, 215, 64, 0.5);
+    background: rgba(13, 19, 46, 0.72);
+    color: var(--text);
+    box-shadow: 0 0.3em 0.9em rgba(0, 0, 0, 0.4);
+  }
+
+  .touch__btn {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border-radius: 14px;
+  }
+
+  .touch__btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .touch__btn:active,
+  .touch__action:active {
+    background: rgba(255, 215, 64, 0.85);
+    color: var(--ink);
+  }
+
+  .touch__btn--up {
+    grid-area: 1 / 2;
+  }
+
+  .touch__btn--left {
+    grid-area: 2 / 1;
+  }
+
+  .touch__btn--right {
+    grid-area: 2 / 3;
+  }
+
+  .touch__btn--down {
+    grid-area: 3 / 2;
+  }
+
+  .touch__action {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 28px;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* HP mendatar: tombol sedikit lebih kecil supaya tidak banyak menutupi peta */
+@media (hover: none) and (pointer: coarse) and (max-height: 500px) {
+  .touch__pad {
+    --touch: 44px;
+  }
+
+  .touch__action {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 22px;
+    font-size: 1.1rem;
+  }
+}
+
+/* HP tegak: area game kecil, sarankan memutar layar */
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  .game-screen .stage::after {
+    content: "Putar HP ke posisi mendatar agar lebih nyaman bermain";
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 0;
+    right: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+/* ---------- Layar kecil (HP) ---------- */
+
+@media (max-width: 640px) {
+  .title__small {
+    font-size: 2.2rem;
+  }
+
+  .title__big {
+    font-size: 3.9rem;
+  }
+
+  .home__tagline {
+    font-size: 1.05rem;
+  }
+
+  .menu__item {
+    font-size: 1.3rem;
+  }
+
+  .menu__item--primary {
+    font-size: 1.55rem;
+  }
+
+  .panel {
+    padding: 1.2em 1.1em;
+  }
+
+  .page__title {
+    font-size: 2rem;
+  }
+
+  .tutorial,
+  .result__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tutorial__col + .tutorial__col {
+    margin-top: 1.1em;
+  }
+
+  .result__type {
+    font-size: 3.2rem;
+  }
+}
+
+/* HP mendatar: tinggi layar pendek */
+@media (max-height: 500px) {
+  .title__small {
+    font-size: 1.8rem;
+  }
+
+  .title__big {
+    font-size: 3.2rem;
+  }
+
+  .home__tagline,
+  .home__eyebrow {
+    display: none;
+  }
+
+  .menu {
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+  }
+
+  .menu__item {
+    padding: 0.4em 1em 0.46em;
+    font-size: 1.15rem;
+  }
+
+  .menu__item--primary {
+    font-size: 1.35rem;
+  }
+
+  .home__note {
+    margin-top: 0.8rem;
+  }
+}
